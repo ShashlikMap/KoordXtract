@@ -18,8 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.shashlik.koordxtract.example.ui.theme.KoordXtractTheme
-import com.shashlik.koordxtract.fibonacci.LatLon
-import com.shashlik.koordxtract.fibonacci.LatLonExtractor
+import LatLon
+import com.shashlik.koordxtract.LatLonExtractor
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
