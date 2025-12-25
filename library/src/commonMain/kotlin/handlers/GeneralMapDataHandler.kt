@@ -1,9 +1,10 @@
 package handlers
 
-import LatLon
+import io.ktor.client.HttpClient
 
-class GeneralMapDataHandler : MapDataHandler {
-    override suspend fun resolve(data: String): LatLon? {
-        return null
+class GeneralMapDataHandler(httpClient: HttpClient) : MapDataHandler(httpClient) {
+
+    override fun canResolve(data: String): Boolean {
+        return false
     }
 }

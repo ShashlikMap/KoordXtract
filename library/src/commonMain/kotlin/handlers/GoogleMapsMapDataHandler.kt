@@ -1,10 +1,9 @@
 package handlers
 
-import LatLon
+import io.ktor.client.HttpClient
 
-class GoogleMapsMapDataHandler : MapDataHandler {
-    override suspend fun resolve(data: String): LatLon? {
-        if (!data.startsWith("https://maps.app.goo.gl/")) return null
-        return LatLon(1.0, 10.0)
+class GoogleMapsMapDataHandler(httpClient: HttpClient) : MapDataHandler(httpClient) {
+    override fun canResolve(data: String): Boolean {
+        return data.startsWith("https://maps.app.goo.gl/")
     }
 }
