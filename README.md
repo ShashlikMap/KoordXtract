@@ -2,6 +2,8 @@
 A small KMP utility library that helps to resolve shared links from map apps(with focus on GoogleMaps) 
 to latitude/longitude coordinates without relying on any Google API(e.g. Places).
 
+_Work is still in progress!_
+
 Android demo application can receive a shared the link from GoogleMaps or it can launch an internal test that resolves some random links:
 ```
 D  link: https://maps.app.goo.gl/wPn6i3inrCDNFD7r8, result: Either.Right((108.0465532, 12.7109931))
