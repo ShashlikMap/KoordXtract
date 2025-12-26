@@ -1,10 +1,17 @@
 package handlers
 
-import io.ktor.client.HttpClient
+import LatLon
+import LatLonExtractError
+import arrow.core.Either
+import arrow.core.left
 
-class GeneralMapDataHandler(httpClient: HttpClient) : MapDataHandler(httpClient) {
+class GeneralMapDataHandler : MapDataHandler() {
 
     override fun canResolve(data: String): Boolean {
         return false
+    }
+
+    override suspend fun resolve(data: String): Either<LatLonExtractError, LatLon> {
+        return LatLonExtractError.GeneralError("Not implemented yet").left()
     }
 }

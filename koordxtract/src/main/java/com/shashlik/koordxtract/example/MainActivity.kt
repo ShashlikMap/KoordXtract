@@ -20,16 +20,20 @@ import androidx.lifecycle.lifecycleScope
 import com.shashlik.koordxtract.example.ui.theme.KoordXtractTheme
 import LatLon
 import LatLonExtractError
+import LatLonExtractor
 import arrow.core.Either
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
-import com.shashlik.koordxtract.LatLonExtractor
+import com.shashlik.koordxtract.extractFromIntent
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private var latestLatLon by mutableStateOf<Option<Either<LatLonExtractError, LatLon>>>(None)
+    private val xtractor = LatLonExtractor()
+    private var latestLatLon by mutableStateOf<Option<Either<LatLonExtractError, LatLon>>>(
+        None
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +67,7 @@ class MainActivity : ComponentActivity() {
 
     fun handlingIntent(intent: Intent) {
         lifecycleScope.launch {
-            latestLatLon = Some(LatLonExtractor.extractFromIntent(intent))
+            latestLatLon = Some(xtractor.extractFromIntent(intent))
         }
     }
 }
