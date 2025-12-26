@@ -21,20 +21,27 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
-class GoogleMapsMapDataHandler(private val httpClient: HttpClient = justClient) : MapDataHandler() {
+class GoogleMapsMapDataHandler(
+    httpClientLogs: Boolean = false,
+    private val httpClient: HttpClient = createInternalClient(
+        httpClientLogs
+    )
+) : MapDataHandler() {
     companion object {
-        private val justClient = HttpClient {
+        private fun createInternalClient(httpClientLogs: Boolean) = HttpClient {
             followRedirects = false
             engine {
                 followRedirects = false
             }
-            install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        co.touchlab.kermit.Logger.i { "HTTP Client: $message" }
+            if (httpClientLogs) {
+                install(Logging) {
+                    logger = object : Logger {
+                        override fun log(message: String) {
+                            co.touchlab.kermit.Logger.i { "HTTP Client: $message" }
+                        }
                     }
+                    level = LogLevel.HEADERS
                 }
-                level = LogLevel.HEADERS
             }
         }
 
@@ -56,13 +63,16 @@ class GoogleMapsMapDataHandler(private val httpClient: HttpClient = justClient) 
         var responseStatus = HttpStatusCode.NotFound
         var attempts = 0
         while (responseStatus == HttpStatusCode.NotFound && attempts < MAX_RETRIES) {
+            if (attempts > 0) {
+                co.touchlab.kermit.Logger.w { "Next attempt" }
+            }
             response = httpClient.getWithSimpleUA(data)
             responseStatus = response.status
             co.touchlab.kermit.Logger.d { "responseStatus: $responseStatus" }
 
             attempts++
             delay(RETRY_DELAY)
-            co.touchlab.kermit.Logger.w { "Next attempt" }
+
         }
 
         return either {

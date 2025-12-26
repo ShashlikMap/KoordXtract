@@ -10,9 +10,9 @@ sealed interface LatLonExtractError {
     data object ExceedRetriesAmount : LatLonExtractError
 }
 
-class LatLonExtractor {
+class LatLonExtractor(httpClientLogs: Boolean = false) {
     private val registeredHandlers = linkedSetOf(
-        GoogleMapsMapDataHandler()
+        GoogleMapsMapDataHandler(httpClientLogs)
     )
 
     suspend fun extractFromStringData(data: String?): Either<LatLonExtractError, LatLon> {
