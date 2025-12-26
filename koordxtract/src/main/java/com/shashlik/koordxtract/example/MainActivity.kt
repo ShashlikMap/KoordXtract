@@ -19,12 +19,17 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.shashlik.koordxtract.example.ui.theme.KoordXtractTheme
 import LatLon
+import LatLonExtractError
+import arrow.core.Either
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.Some
 import com.shashlik.koordxtract.LatLonExtractor
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private var latestLatLon by mutableStateOf<LatLon?>(null)
+    private var latestLatLon by mutableStateOf<Option<Either<LatLonExtractError, LatLon>>>(None)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +40,15 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.fillMaxSize()) {
                         Column(modifier = Modifier.align(Alignment.Center)) {
-                            Text(text = "LatLon: $latestLatLon")
+                            latestLatLon.fold({
+                                Text(text = "Share location")
+                            }, { result ->
+                                result.fold({
+                                    Text(text = "Error: $it")
+                                }, {
+                                    Text(text = "LatLon: $it")
+                                })
+                            })
                         }
                     }
                 }
@@ -50,7 +63,7 @@ class MainActivity : ComponentActivity() {
 
     fun handlingIntent(intent: Intent) {
         lifecycleScope.launch {
-            latestLatLon = LatLonExtractor.extractFromIntent(intent)
+            latestLatLon = Some(LatLonExtractor.extractFromIntent(intent))
         }
     }
 }

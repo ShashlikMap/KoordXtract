@@ -1,15 +1,17 @@
 package handlers
 
 import LatLon
+import LatLonExtractError
+import arrow.core.Either
+import arrow.core.getOrElse
+import arrow.core.raise.either
 import extractLatLonFromUrlContent
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
-import io.ktor.utils.io.CancellationException
 import kotlinx.coroutines.delay
 
 abstract class MapDataHandler(private val httpClient: HttpClient) {
@@ -28,43 +30,35 @@ abstract class MapDataHandler(private val httpClient: HttpClient) {
         }
     }
 
-    suspend fun resolve(data: String): LatLon? {
-        if (!canResolve(data)) return null
-        try {
-            var latLon = httpClient.extractLatLonFromUrlContent(data)
-            if (latLon != null) {
-                return latLon
+    suspend fun resolve(data: String): Either<LatLonExtractError, LatLon> {
+        var response = createClient().get(data) {
+            headers {
+                append("User-Agent", "Mozilla/5.0")
             }
+        }
 
-            var response = createClient().get(data) {
+        co.touchlab.kermit.Logger.i { "response :  $response" }
+        var responseCode = response.status.value
+        while (responseCode == 404) {
+            delay(1000)
+            co.touchlab.kermit.Logger.w { "NEXT ATTEMPT" }
+
+            response = createClient().get(data) {
                 headers {
                     append("User-Agent", "Mozilla/5.0")
                 }
             }
+            responseCode = response.status.value
+        }
 
-            var responseCode = response.status.value
-            while (responseCode == 404) {
-                delay(1000)
-                co.touchlab.kermit.Logger.w { "KIOL NEXT ATTEMPT" }
-
-                response = createClient().get(data) {
-                    headers {
-                        append("User-Agent", "Mozilla/5.0")
-                    }
-                }
-                responseCode = response.status.value
+        val newUrl = response.headers["Location"]
+        co.touchlab.kermit.Logger.i { "newUrl :  $newUrl" }
+        return either {
+            httpClient.extractLatLonFromUrlContent(newUrl ?: data).getOrElse {
+                raise(LatLonExtractError.GeneralError("No data"))
             }
-
-            val newUrl = response.headers["Location"]
-            latLon = httpClient.extractLatLonFromUrlContent(newUrl!!)
-            return latLon
-        } catch (e: CancellationException) {
-            throw e
-        } catch (t: Throwable) {
-            co.touchlab.kermit.Logger.e { "Can't resolve url: $t" }
-            return null
         }
     }
 
-    protected abstract fun canResolve(data: String): Boolean
+    abstract fun canResolve(data: String): Boolean
 }
