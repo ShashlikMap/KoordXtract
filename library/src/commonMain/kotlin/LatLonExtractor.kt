@@ -6,6 +6,8 @@ import handlers.GoogleMapsMapDataHandler
 
 sealed interface LatLonExtractError {
     data class GeneralError(val description: String) : LatLonExtractError
+    data object Failed : LatLonExtractError
+    data object ExceedRetriesAmount : LatLonExtractError
 }
 
 class LatLonExtractor {

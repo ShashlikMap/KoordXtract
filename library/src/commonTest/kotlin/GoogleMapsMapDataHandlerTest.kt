@@ -1,45 +1,72 @@
 package handlers
 
 import LatLon
-import arrow.core.None
-import arrow.core.Some
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.headersOf
+import kotlinx.coroutines.test.runTest
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class GoogleMapsMapDataHandlerTest {
 
     @Test
-    fun `check that extracting returns correct results`() {
+    fun `check that checkResolve return correct value`() = runTest {
         val handler = GoogleMapsMapDataHandler()
+        assertTrue { handler.canResolve("https://maps.app.goo.gl/HSUQp6K9L8z5efAY7") }
+        assertFalse { handler.canResolve("https://www.google.gl/HSUQp6K9L8z5efAY7") }
+    }
 
-        val japan = File("src/commonTest/testdata/gmaps_test_japan.txt")
+    @Test
+    fun `check google maps url can be resolved correctly`() = runTest {
+        val handler = GoogleMapsMapDataHandler()
+        // japan
         assertEquals(
-            Some(LatLon(139.7442197, 35.6784667)),
-            handler.extractLatLonFromUrlContentInternal(japan.readText())
+            LatLon(139.6641148, 35.791951600000004),
+            handler.resolve("https://maps.app.goo.gl/HSUQp6K9L8z5efAY7").getOrNull()
         )
 
-        val usa = File("src/commonTest/testdata/gmaps_test_usa.txt")
+        // usa
         assertEquals(
-            Some(LatLon(-117.64672180000001, 34.28889219999999)),
-            handler.extractLatLonFromUrlContentInternal(usa.readText())
+            LatLon(-118.13840819999999, 33.8114365),
+            handler.resolve("https://maps.app.goo.gl/nWx4HL35gqPhHrif8").getOrNull()
         )
     }
 
     @Test
-    fun `check that extracting returns None for non-gmaps content`() {
-        val handler = GoogleMapsMapDataHandler()
-
-        val someContent1 = "QWQRWTQUWYQUIWIQOBNDJSND#(E(.1.1.3."
-        assertEquals(
-            None,
-            handler.extractLatLonFromUrlContentInternal(someContent1)
+    fun `check that extracting returns correct results`() = runTest {
+        mockEngineTest(
+            File("src/commonTest/testdata/gmaps_test_japan.txt"),
+            LatLon(139.7442197, 35.6784667)
         )
+        mockEngineTest(
+            File("src/commonTest/testdata/gmaps_test_usa.txt"),
+            LatLon(-117.64672180000001, 34.28889219999999)
+        )
+        mockEngineTest(
+            File("src/commonTest/testdata/gmaps_test_broken.txt"),
+            null
+        )
+    }
 
-        val someContent2 = "-117.64672180000001, 34.28889219999999"
+    private suspend fun mockEngineTest(file: File, result: LatLon?) {
+        val mockEngine = MockEngine { _ ->
+            respond(
+                content = file.readText(),
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, "text/html; charset=utf-8")
+            )
+        }
+        val handler = GoogleMapsMapDataHandler(HttpClient(mockEngine))
         assertEquals(
-            None,
-            handler.extractLatLonFromUrlContentInternal(someContent2)
+            result,
+            handler.resolve("anyurl").getOrNull()
         )
     }
 }

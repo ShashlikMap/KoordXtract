@@ -8,6 +8,7 @@ import arrow.core.Option
 import arrow.core.Some
 import arrow.core.getOrElse
 import arrow.core.raise.either
+import arrow.core.raise.ensure
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.logging.LogLevel
@@ -15,83 +16,88 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
-class GoogleMapsMapDataHandler : MapDataHandler() {
-
-    private val latLonRegex =
-        Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
-
-
-    private fun createClient() = HttpClient {
-        followRedirects = false
-        engine {
+class GoogleMapsMapDataHandler(private val httpClient: HttpClient = justClient) : MapDataHandler() {
+    companion object {
+        private val justClient = HttpClient {
             followRedirects = false
-        }
-        install(Logging) {
-            logger = object : Logger {
-                override fun log(message: String) {
-                    co.touchlab.kermit.Logger.i { "HTTP Client: $message" }
-                }
+            engine {
+                followRedirects = false
             }
-            level = LogLevel.HEADERS
+            install(Logging) {
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        co.touchlab.kermit.Logger.i { "HTTP Client: $message" }
+                    }
+                }
+                level = LogLevel.HEADERS
+            }
         }
+
+        private const val GOOGLE_MAPS_URL_PREFIX = "https://maps.app.goo.gl/"
+
+        private const val MAX_RETRIES = 5
+        private val RETRY_DELAY = 1.seconds
+
+        private val LAT_LON_REGEX =
+            Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
     }
 
     override fun canResolve(data: String): Boolean {
-        return data.startsWith("https://maps.app.goo.gl/")
+        return data.startsWith(GOOGLE_MAPS_URL_PREFIX)
     }
 
     override suspend fun resolve(data: String): Either<LatLonExtractError, LatLon> {
-        var response = createClient().get(data) {
-            headers {
-                append("User-Agent", "Mozilla/5.0")
-            }
+        var response: HttpResponse? = null
+        var responseStatus = HttpStatusCode.NotFound
+        var attempts = 0
+        while (responseStatus == HttpStatusCode.NotFound && attempts < MAX_RETRIES) {
+            response = httpClient.getWithSimpleUA(data)
+            responseStatus = response.status
+            co.touchlab.kermit.Logger.d { "responseStatus: $responseStatus" }
+
+            attempts++
+            delay(RETRY_DELAY)
+            co.touchlab.kermit.Logger.w { "Next attempt" }
         }
 
-        co.touchlab.kermit.Logger.i { "response :  $response" }
-        var responseCode = response.status
-        while (responseCode == HttpStatusCode.NotFound) {
-            delay(1000)
-            co.touchlab.kermit.Logger.w { "NEXT ATTEMPT" }
-
-            response = createClient().get(data) {
-                headers {
-                    append("User-Agent", "Mozilla/5.0")
-                }
-            }
-            responseCode = response.status
-        }
-
-        val newUrl = response.headers["Location"]
-        co.touchlab.kermit.Logger.i { "newUrl :  $newUrl" }
         return either {
+            ensure(response != null) { raise(LatLonExtractError.ExceedRetriesAmount) }
+
+            val newUrl = response.headers["Location"]
+            co.touchlab.kermit.Logger.d { "new url for extraction :  $newUrl" }
             extractLatLonFromUrlContent(newUrl ?: data).getOrElse {
-                raise(LatLonExtractError.GeneralError("No data"))
+                raise(LatLonExtractError.Failed)
             }
+        }
+    }
+
+    private suspend fun HttpClient.getWithSimpleUA(url: String) = get(url) {
+        headers {
+            append("User-Agent", "Mozilla/5.0")
+        }
+    }
+
+    private suspend fun HttpClient.getWithFullUA(url: String) = get(url) {
+        headers {
+            append(
+                "User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            )
         }
     }
 
     private suspend fun extractLatLonFromUrlContent(
         url: String,
     ): Option<LatLon> {
-        co.touchlab.kermit.Logger.i { "extract from :  $url" }
-        val htmlContent: String = HttpClient().get(url) {
-            headers {
-                append(
-                    "User-Agent",
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-                )
-            }
-        }.body()
+        co.touchlab.kermit.Logger.i { "try extract from: $url" }
+        val htmlContent: String = httpClient.getWithFullUA(url).body()
 
-        return extractLatLonFromUrlContentInternal(htmlContent)
-    }
-
-    // TODO Make private
-    fun extractLatLonFromUrlContentInternal(htmlContent: String): Option<LatLon> {
-        latLonRegex.find(htmlContent)?.let { match ->
+        LAT_LON_REGEX.find(htmlContent)?.let { match ->
             val val1 = match.groupValues[1].toDoubleOrNull()
             val val2 = match.groupValues[2].toDoubleOrNull()
 
