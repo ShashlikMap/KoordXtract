@@ -26,7 +26,7 @@ dependencies {
     implementation("com.github.ShashlikMap:KoordXTract:0.2.0")
 }
 ```
-3. 
+3. Android/Kotlin usage example
 ```kotlin
 val xTractor = LatLonExtractor()
 lifecycleScope.launch {
