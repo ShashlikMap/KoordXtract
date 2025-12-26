@@ -20,6 +20,10 @@ import kotlinx.coroutines.delay
 
 class GoogleMapsMapDataHandler : MapDataHandler() {
 
+    private val latLonRegex =
+        Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
+
+
     private fun createClient() = HttpClient {
         followRedirects = false
         engine {
@@ -69,7 +73,7 @@ class GoogleMapsMapDataHandler : MapDataHandler() {
         }
     }
 
-    internal suspend fun extractLatLonFromUrlContent(
+    private suspend fun extractLatLonFromUrlContent(
         url: String,
     ): Option<LatLon> {
         co.touchlab.kermit.Logger.i { "extract from :  $url" }
@@ -85,10 +89,8 @@ class GoogleMapsMapDataHandler : MapDataHandler() {
         return extractLatLonFromUrlContentInternal(htmlContent)
     }
 
-    private val latLonRegex =
-        Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
-
-    private fun extractLatLonFromUrlContentInternal(htmlContent: String): Option<LatLon> {
+    // TODO Make private
+    fun extractLatLonFromUrlContentInternal(htmlContent: String): Option<LatLon> {
         latLonRegex.find(htmlContent)?.let { match ->
             val val1 = match.groupValues[1].toDoubleOrNull()
             val val2 = match.groupValues[2].toDoubleOrNull()
