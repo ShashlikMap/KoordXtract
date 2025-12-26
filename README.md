@@ -3,6 +3,7 @@ A small KMP utility library that helps to resolve shared links from map apps(wit
 to latitude/longitude coordinates without relying on any Google API(e.g. Places).
 
 _Work is still in progress!_
+Initial goals of the library is to use it in [shashlik-map](https://github.com/ShashlikMap/shashlik-map) project.
 
 Android demo application can receive a shared the link from GoogleMaps or it can launch an internal test that resolves some random links:
 ```
