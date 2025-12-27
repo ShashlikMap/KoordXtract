@@ -17,17 +17,17 @@ D  link: https://maps.app.goo.gl/7C7nDGQ15kKD3vCv5, result: Either.Right((-3.694
 D  link: https://maps.app.goo.gl/r6AfdfewurGHRiLe7, result: Either.Right((42.2736908, 18.2124262))
 ```
 ## How to use
-1. Add Jitpack maven
+1. Add dependency to the version catalog
 ```gradle
-maven { url = uri("https://jitpack.io") }
+[versions]
+koordxtract = "0.3.0"
+
+[libraries]
+koordxtract = { group = "io.github.shashlikmap", name = "koordxtract", version.ref = "koordxtract" }
+
+implementation(libs.koordxtract)
 ```
-2. Add dependency
-```gradle
-dependencies {
-    implementation("com.github.ShashlikMap:KoordXTract:0.2.0")
-}
-```
-3. Android/Kotlin usage example
+2.Android/Kotlin usage example
 ```kotlin
 val xTractor = LatLonExtractor()
 lifecycleScope.launch {
@@ -39,9 +39,12 @@ Or use a convienient extension for `Intent` in case of Android
 ```kotlin
 xTractor.extractFromIntent(...)
 ```
+3. iOS usage
+
+TODO()
 
 ## Roadmap
-- [ ] Complete the current version and publish to Maven Central
+- [ ] Complete the current version and configure CI
 - [ ] Add iOS example
 - [ ] Add more internal resolvers
 
