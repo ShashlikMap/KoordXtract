@@ -42,15 +42,15 @@ class GoogleMapsMapDataHandlerTest {
     @Test
     fun `check that extracting returns correct results`() = runTest {
         mockEngineTest(
-            File("src/commonTest/testdata/gmaps_test_japan.txt"),
+            File("src/androidHostTest/testdata/gmaps_test_japan.txt"),
             LatLon(139.7442197, 35.6784667)
         )
         mockEngineTest(
-            File("src/commonTest/testdata/gmaps_test_usa.txt"),
+            File("src/androidHostTest/testdata/gmaps_test_usa.txt"),
             LatLon(-117.64672180000001, 34.28889219999999)
         )
         mockEngineTest(
-            File("src/commonTest/testdata/gmaps_test_broken.txt"),
+            File("src/androidHostTest/testdata/gmaps_test_broken.txt"),
             null
         )
     }
@@ -63,7 +63,7 @@ class GoogleMapsMapDataHandlerTest {
                 headers = headersOf(HttpHeaders.ContentType, "text/html; charset=utf-8")
             )
         }
-        val handler = GoogleMapsMapDataHandler(HttpClient(mockEngine))
+        val handler = GoogleMapsMapDataHandler(httpClientLogs = false, HttpClient(mockEngine))
         assertEquals(
             result,
             handler.resolve("anyurl").getOrNull()
