@@ -1,4 +1,5 @@
 import SwiftUI
+import ComposeApp
 
 @main
 struct iOSApp: App {
@@ -21,5 +22,14 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
     
     func handleURL(_ url: URL) {
         print("DEBUG: AppDelegate - handleURL called with: \(url)")
+        if url.scheme == "koordxtract",
+           let components = URLComponents(string: url.absoluteString),
+           let queryItem = components.queryItems?.first(where: { $0.name == "link" }),
+           let linkURL = queryItem.value.flatMap(URL.init) {
+            print("DEBUG: AppDelegate - Processing koordxtract link: \(linkURL)")
+            
+            MainViewControllerKt.handlingUrlFromiOS(url: linkURL.absoluteString)
+            return
+        }
     }
 }

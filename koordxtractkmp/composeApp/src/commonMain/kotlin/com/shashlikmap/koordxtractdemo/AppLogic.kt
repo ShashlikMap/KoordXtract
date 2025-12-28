@@ -1,4 +1,4 @@
-package com.example.kmptemp1
+package com.shashlikmap.koordxtractdemo
 
 import LatLon
 import LatLonExtractError
@@ -33,6 +33,9 @@ class AppLogic {
             "https://maps.app.goo.gl/r6AfdfewurGHRiLe7"
         )
     }
+
+    //Apple
+    //https://maps.apple/p/ogrw-5mF-Pjyax
 
     sealed interface State {
         data object Loading : State

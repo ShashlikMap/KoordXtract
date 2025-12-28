@@ -19,19 +19,15 @@ class ShareViewController: SLComposeServiceViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("kiol view did load")
-        os_log("viewDidLoad", log: logger, type: .info)
         guard let extensionItems = extensionContext?.inputItems as? [NSExtensionItem],
               let attachments = extensionItems.compactMap({ $0.attachments }).flatMap({ $0 }) as? [NSItemProvider],
               let itemProvider = attachments.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.url.identifier) }) else {
-            os_log("[KoordXTract Extension] - URL ItemProvider is missing", log: logger, type: .error)
-//            extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+            extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
             return
         }
         itemProvider.loadItem(forTypeIdentifier: UTType.url.identifier) { [weak self] data, error in
             guard let url = data as? URL else {
-                os_log("[KoordXTract Extension] - Invalid URL", log: self!.logger, type: .error)
-                //                self?.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+                self?.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
                 return
             }
             
@@ -42,7 +38,7 @@ class ShareViewController: SLComposeServiceViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        os_log("viewDidAppear", log: logger, type: .info)
+        
         extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
     
@@ -55,7 +51,6 @@ class ShareViewController: SLComposeServiceViewController {
         var responder: UIResponder? = self
         while responder != nil {
             if let application = responder as? UIApplication {
-                print("app open fron extension \(application)")
                 application.open(url, options: [:], completionHandler: nil)
                 break
             }

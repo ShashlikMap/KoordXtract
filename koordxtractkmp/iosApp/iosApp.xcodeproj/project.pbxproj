@@ -36,7 +36,7 @@
 
 /* Begin PBXFileReference section */
 		092D77B12EFFBE2000607092 /* KoordXTract.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = KoordXTract.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA3FA56C704226F3638ADEB2 /* KmpTemp1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KmpTemp1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA3FA56C704226F3638ADEB2 /* KoordXTract.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KoordXTract.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -101,7 +101,7 @@
 		01526A76C2624FD3514C8F8D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BA3FA56C704226F3638ADEB2 /* KmpTemp1.app */,
+				BA3FA56C704226F3638ADEB2 /* KoordXTract.app */,
 				092D77B12EFFBE2000607092 /* KoordXTract.appex */,
 			);
 			name = Products;
@@ -164,7 +164,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = BA3FA56C704226F3638ADEB2 /* KmpTemp1.app */;
+			productReference = BA3FA56C704226F3638ADEB2 /* KoordXTract.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -289,7 +289,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.kmptemp1.KmpTemp1.KoordXTract;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shashlikmap.KoordXTract;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -320,7 +320,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.kmptemp1.KmpTemp1.KoordXTract;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shashlikmap.KoordXTract;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
