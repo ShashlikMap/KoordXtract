@@ -9,11 +9,12 @@ import arrow.core.Some
 import arrow.core.getOrElse
 import arrow.core.raise.either
 import arrow.core.raise.ensure
+import httpclient.createNoRedirectClient
+import httpclient.getLocationHeader
+import httpclient.getWithFullUA
+import httpclient.getWithSimpleUA
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
@@ -21,27 +22,11 @@ import kotlin.time.Duration.Companion.seconds
 
 class GoogleMapsMapDataHandler(
     httpClientLogs: Boolean = false,
-    private val httpClient: HttpClient = createInternalClient(
+    private val httpClient: HttpClient = createNoRedirectClient(
         httpClientLogs
     )
 ) : MapDataHandler() {
     companion object {
-        private fun createInternalClient(httpClientLogs: Boolean) = HttpClient {
-            followRedirects = false
-            engine {
-                followRedirects = false
-            }
-            if (httpClientLogs) {
-                install(Logging) {
-                    logger = object : Logger {
-                        override fun log(message: String) {
-                            co.touchlab.kermit.Logger.i { "HTTP Client: $message" }
-                        }
-                    }
-                    level = LogLevel.HEADERS
-                }
-            }
-        }
 
         private const val GOOGLE_MAPS_URL_PREFIX = "https://maps.app.goo.gl/"
 
@@ -49,7 +34,7 @@ class GoogleMapsMapDataHandler(
         private val RETRY_DELAY = 1.seconds
         private val MAX_REDIRECTS = 2
 
-        private val LAT_LON_REGEX =
+        private val GOOGLE_LAT_LON_REGEX =
             Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
     }
 
@@ -84,7 +69,7 @@ class GoogleMapsMapDataHandler(
         return either {
             ensure(response != null) { raise(LatLonExtractError.ExceedRetriesAmount) }
 
-            val newUrl = response.headers["Location"]
+            val newUrl = response.getLocationHeader()
             co.touchlab.kermit.Logger.d { "new url for extraction :  $newUrl" }
             if (att < MAX_REDIRECTS && newUrl != null) {
                 return internalResolve(newUrl, att + 1)
@@ -100,16 +85,6 @@ class GoogleMapsMapDataHandler(
     ): Option<LatLon> {
         co.touchlab.kermit.Logger.i { "try extract from: $url" }
         val htmlContent: String = httpClient.getWithFullUA(url).body()
-
-        LAT_LON_REGEX.find(htmlContent)?.let { match ->
-            val val1 = match.groupValues[1].toDoubleOrNull()
-            val val2 = match.groupValues[2].toDoubleOrNull()
-
-            if (val1 != null && val2 != null) {
-                return Some(LatLon(val2, val1))
-            }
-        }
-
-        return None
+        return htmlContent.tryExtract(GOOGLE_LAT_LON_REGEX, latLonReversed = true)
     }
 }

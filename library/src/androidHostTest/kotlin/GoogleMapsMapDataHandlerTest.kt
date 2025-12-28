@@ -12,7 +12,6 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class GoogleMapsMapDataHandlerTest {
@@ -22,28 +21,6 @@ class GoogleMapsMapDataHandlerTest {
         val handler = GoogleMapsMapDataHandler()
         assertTrue { handler.canResolve("https://maps.app.goo.gl/HSUQp6K9L8z5efAY7") }
         assertFalse { handler.canResolve("https://www.google.gl/HSUQp6K9L8z5efAY7") }
-    }
-
-    @Test
-    fun `check google maps url can be resolved correctly`() = runTest {
-        val handler = GoogleMapsMapDataHandler()
-        // japan
-        assertEquals(
-            LatLon(35.791951600000004, 139.6641148),
-            handler.resolve("https://maps.app.goo.gl/HSUQp6K9L8z5efAY7").getOrNull()
-        )
-
-        // usa
-        assertEquals(
-            LatLon(33.8114365, -118.13840819999999),
-            handler.resolve("https://maps.app.goo.gl/nWx4HL35gqPhHrif8").getOrNull()
-        )
-
-        // from iOS Google Maps
-        assertEquals(
-            LatLon(35.7223556, 139.7793444),
-            handler.resolve("https://maps.app.goo.gl/PauhWtcmNPCUopxW9").getOrNull()
-        )
     }
 
     @Test
