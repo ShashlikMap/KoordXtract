@@ -5,7 +5,6 @@ import handlers.AppleMapDataHandler
 import handlers.GeneralMapDataHandler
 import handlers.GoogleMapsMapDataHandler
 
-
 sealed interface LatLonExtractError {
     /**
      * No any data presented
@@ -24,24 +23,30 @@ sealed interface LatLonExtractError {
 }
 
 /**
- * Class to extracts [LatLon]
+ * Class to extracts [LatLon] for maps application.
+ * Google and Apple Maps are supported.
  */
-class LatLonExtractor(httpClientLogs: Boolean = false) {
-    private val registeredHandlers = linkedSetOf(
-        GoogleMapsMapDataHandler(httpClientLogs),
-        AppleMapDataHandler()
-    )
+class LatLonExtractor(
+    httpClientLogs: Boolean = false,
+) {
+    private val registeredHandlers =
+        linkedSetOf(
+            GoogleMapsMapDataHandler(httpClientLogs),
+            AppleMapDataHandler(),
+        )
 
     /**
      * Extracts [LatLon] from [data] or return [LatLonExtractError]
      */
     suspend fun extractFromStringData(data: String?): Either<LatLonExtractError, LatLon> {
-        co.touchlab.kermit.Logger.d { "Trying to extract from: $data" }
+        co.touchlab.kermit.Logger
+            .d { "Trying to extract from: $data" }
         return either {
             ensure(data != null) { LatLonExtractError.NoData }
-            val handler = registeredHandlers.firstOrNull { handler ->
-                handler.canResolve(data)
-            } ?: GeneralMapDataHandler()
+            val handler =
+                registeredHandlers.firstOrNull { handler ->
+                    handler.canResolve(data)
+                } ?: GeneralMapDataHandler()
             handler.resolve(data).bind()
         }
     }

@@ -17,19 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 val koordAppLogic = AppLogic()
 
 @Composable
-@Preview
-fun App() {
+fun App(modifier: Modifier = Modifier) {
     MaterialTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
             ) {
                 LatLonResult(koordAppLogic)
             }
@@ -41,7 +40,7 @@ fun App() {
 private fun BoxScope.LatLonResult(appLogic: AppLogic) {
     Column(
         modifier = Modifier.align(Alignment.Center),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Button(onClick = {
             appLogic.linksTest()
@@ -68,7 +67,6 @@ private fun BoxScope.LatLonResult(appLogic: AppLogic) {
                     })
                 }
             }
-
         })
     }
 }

@@ -11,7 +11,6 @@ import arrow.core.Some
  * Abstract data resolver to [LatLon]
  */
 abstract class MapDataHandler {
-
     protected companion object {
         val GENERAL_LAT_LON_REGEX =
             Regex("([-+]?\\d*\\.?\\d+)[, ]\\s*([-+]?\\d*\\.?\\d+)")
@@ -31,7 +30,10 @@ abstract class MapDataHandler {
      * Convenient general [String] extension to extract [LatLon] using [regex].
      * [latLonReversed] is used to swap the Lat and Lon
      */
-    protected fun String.tryExtract(regex: Regex, latLonReversed: Boolean = false): Option<LatLon> {
+    protected fun String.tryExtract(
+        regex: Regex,
+        latLonReversed: Boolean = false,
+    ): Option<LatLon> {
         regex.find(this)?.let { match ->
             val val1 = match.groupValues[1].toDoubleOrNull()
             val val2 = match.groupValues[2].toDoubleOrNull()

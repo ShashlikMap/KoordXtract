@@ -19,6 +19,8 @@ arrow = "2.2.1.1"
 composeMultiplatform = "1.9.1"
 androidx-appcompat = "1.7.1"
 androidx-lifecycle = "2.9.6"
+ktlint-gradle = "14.0.1"
+ktlint-ruleset-compose = "0.4.22"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -56,3 +58,4 @@ vanniktech-mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }

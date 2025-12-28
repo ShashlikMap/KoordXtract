@@ -18,21 +18,21 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
-
 /**
  * Resolves Google Maps links.
  * It extracts [LatLon] from HTML content of the [MAX_REDIRECTS] url.
+ * GoogleMaps on iOS requires more than 1 redirects!
  * Quite often Google dynamic links return [HttpStatusCode.NotFound] so [MAX_RETRIES] will
  * be applied if needed.
  */
 class GoogleMapsMapDataHandler(
     httpClientLogs: Boolean = false,
-    private val httpClient: HttpClient = createNoRedirectClient(
-        httpClientLogs
-    )
+    private val httpClient: HttpClient =
+        createNoRedirectClient(
+            httpClientLogs,
+        ),
 ) : MapDataHandler() {
     companion object {
-
         private const val GOOGLE_MAPS_URL_PREFIX = "https://maps.app.goo.gl/"
 
         private const val MAX_RETRIES = 5
@@ -43,39 +43,37 @@ class GoogleMapsMapDataHandler(
             Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
     }
 
-    override fun canResolve(data: String): Boolean {
-        return data.startsWith(GOOGLE_MAPS_URL_PREFIX)
-    }
+    override fun canResolve(data: String): Boolean = data.startsWith(GOOGLE_MAPS_URL_PREFIX)
 
-    override suspend fun resolve(data: String): Either<LatLonExtractError, LatLon> {
-        return internalResolve(data, 0)
-    }
+    override suspend fun resolve(data: String): Either<LatLonExtractError, LatLon> = internalResolve(data, 0)
 
     private suspend fun internalResolve(
         data: String,
-        att: Int
+        att: Int,
     ): Either<LatLonExtractError, LatLon> {
         var response: HttpResponse? = null
         var responseStatus = HttpStatusCode.NotFound
         var attempts = 0
         while (responseStatus == HttpStatusCode.NotFound && attempts < MAX_RETRIES) {
             if (attempts > 0) {
-                co.touchlab.kermit.Logger.w { "Next attempt" }
+                co.touchlab.kermit.Logger
+                    .w { "Next attempt" }
             }
             response = httpClient.getWithSimpleUA(data)
             responseStatus = response.status
-            co.touchlab.kermit.Logger.d { "responseStatus: $responseStatus" }
+            co.touchlab.kermit.Logger
+                .d { "responseStatus: $responseStatus" }
 
             attempts++
             delay(RETRY_DELAY)
-
         }
 
         return either {
             ensure(response != null) { raise(LatLonExtractError.ExceedRetriesAmount) }
 
             val newUrl = response.getLocationHeader()
-            co.touchlab.kermit.Logger.d { "new url for extraction :  $newUrl" }
+            co.touchlab.kermit.Logger
+                .d { "new url for extraction :  $newUrl" }
             if (att < MAX_REDIRECTS && newUrl != null) {
                 return internalResolve(newUrl, att + 1)
             }
@@ -85,10 +83,9 @@ class GoogleMapsMapDataHandler(
         }
     }
 
-    private suspend fun extractLatLonFromUrlContent(
-        url: String,
-    ): Option<LatLon> {
-        co.touchlab.kermit.Logger.i { "try extract from: $url" }
+    private suspend fun extractLatLonFromUrlContent(url: String): Option<LatLon> {
+        co.touchlab.kermit.Logger
+            .i { "try extract from: $url" }
         val htmlContent: String = httpClient.getWithFullUA(url).body()
         return htmlContent.tryExtract(GOOGLE_LAT_LON_REGEX, latLonReversed = true)
     }
