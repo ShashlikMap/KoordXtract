@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "KoordXtract"
 include(":library")
-include(":koordxtract")
+include(":composeApp")
+project(":composeApp").projectDir = File(rootDir, "koordxtractkmp/composeApp")
