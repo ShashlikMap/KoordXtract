@@ -12,6 +12,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class GoogleMapsMapDataHandlerTest {
@@ -28,14 +29,20 @@ class GoogleMapsMapDataHandlerTest {
         val handler = GoogleMapsMapDataHandler()
         // japan
         assertEquals(
-            LatLon(139.6641148, 35.791951600000004),
+            LatLon(35.791951600000004, 139.6641148),
             handler.resolve("https://maps.app.goo.gl/HSUQp6K9L8z5efAY7").getOrNull()
         )
 
         // usa
         assertEquals(
-            LatLon(-118.13840819999999, 33.8114365),
+            LatLon(33.8114365, -118.13840819999999),
             handler.resolve("https://maps.app.goo.gl/nWx4HL35gqPhHrif8").getOrNull()
+        )
+
+        // from iOS Google Maps
+        assertEquals(
+            LatLon(35.7223556, 139.7793444),
+            handler.resolve("https://maps.app.goo.gl/PauhWtcmNPCUopxW9").getOrNull()
         )
     }
 
@@ -43,11 +50,11 @@ class GoogleMapsMapDataHandlerTest {
     fun `check that extracting returns correct results`() = runTest {
         mockEngineTest(
             File("src/androidHostTest/testdata/gmaps_test_japan.txt"),
-            LatLon(139.7442197, 35.6784667)
+            LatLon(35.6784667, 139.7442197)
         )
         mockEngineTest(
             File("src/androidHostTest/testdata/gmaps_test_usa.txt"),
-            LatLon(-117.64672180000001, 34.28889219999999)
+            LatLon(34.28889219999999, -117.64672180000001)
         )
         mockEngineTest(
             File("src/androidHostTest/testdata/gmaps_test_broken.txt"),

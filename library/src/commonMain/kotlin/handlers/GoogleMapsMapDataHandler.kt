@@ -14,8 +14,6 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
@@ -49,6 +47,7 @@ class GoogleMapsMapDataHandler(
 
         private const val MAX_RETRIES = 5
         private val RETRY_DELAY = 1.seconds
+        private val MAX_REDIRECTS = 2
 
         private val LAT_LON_REGEX =
             Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
@@ -59,6 +58,13 @@ class GoogleMapsMapDataHandler(
     }
 
     override suspend fun resolve(data: String): Either<LatLonExtractError, LatLon> {
+        return internalResolve(data, 0)
+    }
+
+    private suspend fun internalResolve(
+        data: String,
+        att: Int
+    ): Either<LatLonExtractError, LatLon> {
         var response: HttpResponse? = null
         var responseStatus = HttpStatusCode.NotFound
         var attempts = 0
@@ -80,6 +86,9 @@ class GoogleMapsMapDataHandler(
 
             val newUrl = response.headers["Location"]
             co.touchlab.kermit.Logger.d { "new url for extraction :  $newUrl" }
+            if (att < MAX_REDIRECTS && newUrl != null) {
+                return internalResolve(newUrl, att + 1)
+            }
             extractLatLonFromUrlContent(newUrl ?: data).getOrElse {
                 raise(LatLonExtractError.Failed)
             }
@@ -97,7 +106,7 @@ class GoogleMapsMapDataHandler(
             val val2 = match.groupValues[2].toDoubleOrNull()
 
             if (val1 != null && val2 != null) {
-                return Some(LatLon(val1, val2))
+                return Some(LatLon(val2, val1))
             }
         }
 
