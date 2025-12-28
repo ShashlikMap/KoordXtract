@@ -1,8 +1,7 @@
 # KoordXtract
-A small KMP utility library that helps to resolve shared links from map apps(with focus on GoogleMaps) 
-to latitude/longitude coordinates without relying on any Google API(e.g. Places).
+A small KMP utility library that helps to resolve shared links from map apps(with focus on GoogleMaps and Apple Maps) 
+to latitude/longitude coordinates without relying on any Google API(e.g. Places) or any other APIs.
 
-_Work is still in progress!_
 Initial goals of the library is to use it in [shashlik-map](https://github.com/ShashlikMap/shashlik-map) project.
 
 Android demo application can receive a shared the link from GoogleMaps or it can launch an internal test that resolves some random links:
@@ -20,14 +19,14 @@ D  link: https://maps.app.goo.gl/r6AfdfewurGHRiLe7, result: Either.Right((42.273
 1. Add dependency to the version catalog
 ```gradle
 [versions]
-koordxtract = "0.3.0"
+koordxtract = "0.4.0"
 
 [libraries]
 koordxtract = { group = "io.github.shashlikmap", name = "koordxtract", version.ref = "koordxtract" }
 
 implementation(libs.koordxtract)
 ```
-2.Android/Kotlin usage example
+2. KMP usage example
 ```kotlin
 val xTractor = LatLonExtractor()
 lifecycleScope.launch {
@@ -35,16 +34,11 @@ lifecycleScope.launch {
     // use result
 }
 ```
-Or use a convienient extension for `Intent` in case of Android
+Or use a convienient extension for `Intent` in case of pure Android
 ```kotlin
 xTractor.extractFromIntent(...)
 ```
-3. iOS usage
-
-TODO()
 
 ## Roadmap
-- [ ] Complete the current version and configure CI
-- [ ] Add iOS example
-- [ ] Add more internal resolvers
+- [ ] Configure CI + more unit tests
 
