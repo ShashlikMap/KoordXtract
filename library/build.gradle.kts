@@ -50,7 +50,6 @@ kotlin {
 }
 
 group = "io.github.shashlikmap"
-version = "0.4.0"
 
 mavenPublishing {
     publishToMavenCentral()
@@ -61,7 +60,7 @@ mavenPublishing {
 
     pom {
         name = "KoordXTract"
-        description = "Converts GoogleMaps links to latitude/longitude"
+        description = "Extract latitude/longitude from GoogleMaps and Apple Maps links"
         inceptionYear = "2025"
         url = "https://github.com/ShashlikMap/KoordXtract"
         licenses {
