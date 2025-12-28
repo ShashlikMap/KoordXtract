@@ -1,6 +1,7 @@
 import arrow.core.Either
 import arrow.core.raise.either
 import arrow.core.raise.ensure
+import handlers.AppleMapDataHandler
 import handlers.GeneralMapDataHandler
 import handlers.GoogleMapsMapDataHandler
 
@@ -12,7 +13,8 @@ sealed interface LatLonExtractError {
 
 class LatLonExtractor(httpClientLogs: Boolean = false) {
     private val registeredHandlers = linkedSetOf(
-        GoogleMapsMapDataHandler(httpClientLogs)
+        GoogleMapsMapDataHandler(httpClientLogs),
+        AppleMapDataHandler()
     )
 
     suspend fun extractFromStringData(data: String?): Either<LatLonExtractError, LatLon> {

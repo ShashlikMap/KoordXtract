@@ -8,7 +8,7 @@ import arrow.core.left
 class GeneralMapDataHandler : MapDataHandler() {
 
     override fun canResolve(data: String): Boolean {
-        return false
+        return true
     }
 
     override suspend fun resolve(data: String): Either<LatLonExtractError, LatLon> {

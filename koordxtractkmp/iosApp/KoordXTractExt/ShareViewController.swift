@@ -12,9 +12,6 @@ import os.log
 
 class ShareViewController: SLComposeServiceViewController {
     
-    let logger = OSLog(subsystem: "com.shashlikmap.koordxtract", category: "shareextension")
-
-
     private let scheme = "koordxtract"
 
     override func viewDidLoad() {

@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		092D77BC2EFFBE2100607092 /* KoordXTract.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 092D77B12EFFBE2000607092 /* KoordXTract.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		092D77E42F00D91F00607092 /* KoordXTractExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 092D77DA2F00D91F00607092 /* KoordXTractExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		092D77B92EFFBE2100607092 /* PBXContainerItemProxy */ = {
+		092D77E22F00D91F00607092 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B2D32269F50946B2B776C82D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 092D77B02EFFBE2000607092;
-			remoteInfo = KoordXTract;
+			remoteGlobalIDString = 092D77D92F00D91F00607092;
+			remoteInfo = KoordXTractExt;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -27,7 +27,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				092D77BC2EFFBE2100607092 /* KoordXTract.appex in Embed Foundation Extensions */,
+				092D77E42F00D91F00607092 /* KoordXTractExt.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -35,17 +35,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		092D77B12EFFBE2000607092 /* KoordXTract.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = KoordXTract.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		092D77DA2F00D91F00607092 /* KoordXTractExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = KoordXTractExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA3FA56C704226F3638ADEB2 /* KoordXTract.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KoordXTract.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		092D77C02EFFBE2100607092 /* Exceptions for "KoordXTract" folder in "KoordXTract" target */ = {
+		092D77E82F00D91F00607092 /* Exceptions for "KoordXTractExt" folder in "KoordXTractExt" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 092D77B02EFFBE2000607092 /* KoordXTract */;
+			target = 092D77D92F00D91F00607092 /* KoordXTractExt */;
 		};
 		342116FFC78992CD4EAD7819 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -57,12 +57,12 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		092D77B22EFFBE2000607092 /* KoordXTract */ = {
+		092D77DB2F00D91F00607092 /* KoordXTractExt */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				092D77C02EFFBE2100607092 /* Exceptions for "KoordXTract" folder in "KoordXTract" target */,
+				092D77E82F00D91F00607092 /* Exceptions for "KoordXTractExt" folder in "KoordXTractExt" target */,
 			);
-			path = KoordXTract;
+			path = KoordXTractExt;
 			sourceTree = "<group>";
 		};
 		8BC2C44A2C13696DBD13C218 /* Configuration */ = {
@@ -81,7 +81,7 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		092D77AE2EFFBE2000607092 /* Frameworks */ = {
+		092D77D72F00D91F00607092 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -102,7 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				BA3FA56C704226F3638ADEB2 /* KoordXTract.app */,
-				092D77B12EFFBE2000607092 /* KoordXTract.appex */,
+				092D77DA2F00D91F00607092 /* KoordXTractExt.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,7 +112,7 @@
 			children = (
 				8BC2C44A2C13696DBD13C218 /* Configuration */,
 				94D31D72324DD285982B7EBF /* iosApp */,
-				092D77B22EFFBE2000607092 /* KoordXTract */,
+				092D77DB2F00D91F00607092 /* KoordXTractExt */,
 				01526A76C2624FD3514C8F8D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -120,26 +120,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		092D77B02EFFBE2000607092 /* KoordXTract */ = {
+		092D77D92F00D91F00607092 /* KoordXTractExt */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 092D77BD2EFFBE2100607092 /* Build configuration list for PBXNativeTarget "KoordXTract" */;
+			buildConfigurationList = 092D77E52F00D91F00607092 /* Build configuration list for PBXNativeTarget "KoordXTractExt" */;
 			buildPhases = (
-				092D77AD2EFFBE2000607092 /* Sources */,
-				092D77AE2EFFBE2000607092 /* Frameworks */,
-				092D77AF2EFFBE2000607092 /* Resources */,
+				092D77D62F00D91F00607092 /* Sources */,
+				092D77D72F00D91F00607092 /* Frameworks */,
+				092D77D82F00D91F00607092 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				092D77B22EFFBE2000607092 /* KoordXTract */,
+				092D77DB2F00D91F00607092 /* KoordXTractExt */,
 			);
-			name = KoordXTract;
+			name = KoordXTractExt;
 			packageProductDependencies = (
 			);
-			productName = KoordXTract;
-			productReference = 092D77B12EFFBE2000607092 /* KoordXTract.appex */;
+			productName = KoordXTractExt;
+			productReference = 092D77DA2F00D91F00607092 /* KoordXTractExt.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		FD07C6296DDFA719033C8A9F /* iosApp */ = {
@@ -155,7 +155,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				092D77BA2EFFBE2100607092 /* PBXTargetDependency */,
+				092D77E32F00D91F00607092 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				94D31D72324DD285982B7EBF /* iosApp */,
@@ -177,7 +177,7 @@
 				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
-					092D77B02EFFBE2000607092 = {
+					092D77D92F00D91F00607092 = {
 						CreatedOnToolsVersion = 26.2;
 					};
 					FD07C6296DDFA719033C8A9F = {
@@ -200,13 +200,13 @@
 			projectRoot = "";
 			targets = (
 				FD07C6296DDFA719033C8A9F /* iosApp */,
-				092D77B02EFFBE2000607092 /* KoordXTract */,
+				092D77D92F00D91F00607092 /* KoordXTractExt */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		092D77AF2EFFBE2000607092 /* Resources */ = {
+		092D77D82F00D91F00607092 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -245,7 +245,7 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		092D77AD2EFFBE2000607092 /* Sources */ = {
+		092D77D62F00D91F00607092 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -262,15 +262,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		092D77BA2EFFBE2100607092 /* PBXTargetDependency */ = {
+		092D77E32F00D91F00607092 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 092D77B02EFFBE2000607092 /* KoordXTract */;
-			targetProxy = 092D77B92EFFBE2100607092 /* PBXContainerItemProxy */;
+			target = 092D77D92F00D91F00607092 /* KoordXTractExt */;
+			targetProxy = 092D77E22F00D91F00607092 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		092D77BE2EFFBE2100607092 /* Debug */ = {
+		092D77E62F00D91F00607092 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -279,8 +279,8 @@
 				DEVELOPMENT_TEAM = HJV4TNRCN8;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = KoordXTract/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = KoordXTract;
+				INFOPLIST_FILE = KoordXTractExt/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KoordXTractExt;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -289,7 +289,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shashlikmap.KoordXTract;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shashlikmap.KoordXTract.KoordXTractExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -301,7 +301,7 @@
 			};
 			name = Debug;
 		};
-		092D77BF2EFFBE2100607092 /* Release */ = {
+		092D77E72F00D91F00607092 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -310,8 +310,8 @@
 				DEVELOPMENT_TEAM = HJV4TNRCN8;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = KoordXTract/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = KoordXTract;
+				INFOPLIST_FILE = KoordXTractExt/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KoordXTractExt;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -320,7 +320,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shashlikmap.KoordXTract;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shashlikmap.KoordXTract.KoordXTractExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -514,11 +514,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		092D77BD2EFFBE2100607092 /* Build configuration list for PBXNativeTarget "KoordXTract" */ = {
+		092D77E52F00D91F00607092 /* Build configuration list for PBXNativeTarget "KoordXTractExt" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				092D77BE2EFFBE2100607092 /* Debug */,
-				092D77BF2EFFBE2100607092 /* Release */,
+				092D77E62F00D91F00607092 /* Debug */,
+				092D77E72F00D91F00607092 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
