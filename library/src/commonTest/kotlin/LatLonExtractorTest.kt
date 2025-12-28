@@ -21,6 +21,18 @@ class LatLonExtractorTest {
                 .getOrNull()
         )
 
+        // OSMAnd map
+        assertEquals(
+            LatLon(35.72795, 139.78278),
+            latLonExtractor.extractFromStringData(
+                "亀\n" +
+                        "        日暮里中央通り (東日暮里五丁目), 荒川区\n" +
+                        "        Location: geo:35.72795,139.78278?z=17\n" +
+                        "        https://osmand.net/map?pin=35.72795,139.78278#17/35.72795/139.78278"
+            )
+                .getOrNull()
+        )
+
         // from Apple Maps
         assertEquals(
             LatLon(37.789303, -122.409737),

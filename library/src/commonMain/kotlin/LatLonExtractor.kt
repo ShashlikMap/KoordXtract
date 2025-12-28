@@ -18,6 +18,7 @@ class LatLonExtractor(httpClientLogs: Boolean = false) {
     )
 
     suspend fun extractFromStringData(data: String?): Either<LatLonExtractError, LatLon> {
+        co.touchlab.kermit.Logger.d { "Trying to extract from: $data" }
         return either {
             ensure(data != null) { LatLonExtractError.GeneralError("No data") }
             val handler = registeredHandlers.firstOrNull { handler ->
