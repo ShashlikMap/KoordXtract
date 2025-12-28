@@ -19,7 +19,7 @@ D  link: https://maps.app.goo.gl/r6AfdfewurGHRiLe7, result: Either.Right((42.273
 1. Add dependency to the version catalog
 ```gradle
 [versions]
-koordxtract = "0.4.0"
+koordxtract = "x.y.z" // the latest version
 
 [libraries]
 koordxtract = { group = "io.github.shashlikmap", name = "koordxtract", version.ref = "koordxtract" }
@@ -40,5 +40,5 @@ xTractor.extractFromIntent(...)
 ```
 
 ## Roadmap
-- [ ] Configure CI + more unit tests
+- [ ] More unit tests
 
