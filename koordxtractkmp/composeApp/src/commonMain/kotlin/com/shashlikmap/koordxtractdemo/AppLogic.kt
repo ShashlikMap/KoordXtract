@@ -20,19 +20,21 @@ import kotlinx.coroutines.launch
 
 class AppLogic {
     companion object {
-        private val TAG = "KoordXTract"
-
         private val RandomLinksAcrossTheWorld = listOf(
-            "https://maps.app.goo.gl/wPn6i3inrCDNFD7r8",
-            "https://maps.app.goo.gl/SrjpRwuVfhqyKc5HA",
-            "https://maps.app.goo.gl/HSUQp6K9L8z5efAY7",
-            "https://maps.app.goo.gl/nWx4HL35gqPhHrif8",
-            "https://maps.app.goo.gl/tkQ8rmvUKTxnstZM8",
-            "https://maps.app.goo.gl/VWAUD4NbM45PDze36",
-            "https://maps.app.goo.gl/7C7nDGQ15kKD3vCv5",
-            "https://maps.app.goo.gl/r6AfdfewurGHRiLe7"
+//            "https://maps.apple/p/ogrw-5mF-Pjyax"
+            "https://maps.app.goo.gl/PauhWtcmNPCUopxW9?g_st%3Dcom.shashlikmap.KoordXTract.KoordXTractExt"
+//            "https://maps.app.goo.gl/wPn6i3inrCDNFD7r8",
+//            "https://maps.app.goo.gl/SrjpRwuVfhqyKc5HA",
+//            "https://maps.app.goo.gl/HSUQp6K9L8z5efAY7",
+//            "https://maps.app.goo.gl/nWx4HL35gqPhHrif8",
+//            "https://maps.app.goo.gl/tkQ8rmvUKTxnstZM8",
+//            "https://maps.app.goo.gl/VWAUD4NbM45PDze36",
+//            "https://maps.app.goo.gl/7C7nDGQ15kKD3vCv5",
+//            "https://maps.app.goo.gl/r6AfdfewurGHRiLe7"
         )
     }
+
+    //https://maps.app.goo.gl/PauhWtcmNPCUopxW9?g_st%3Dcom.shashlikmap.KoordXTract.KoordXTractExt
 
     //Apple
     //https://maps.apple/p/ogrw-5mF-Pjyax

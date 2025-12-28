@@ -3,11 +3,9 @@ package handlers
 import LatLon
 import LatLonExtractError
 import arrow.core.Either
-import arrow.core.Some
 import arrow.core.left
 import arrow.core.right
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
@@ -35,7 +33,7 @@ class AppleMapDataHandler(private val httpClient: HttpClient = createInternalCli
         }
 
         private val LAT_LON_REGEX =
-            Regex("""-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),""")
+            Regex("([-+]?\\d*\\.?\\d+),\\s*([-+]?\\d*\\.?\\d+)")
     }
 
     override fun canResolve(data: String): Boolean {
@@ -51,7 +49,6 @@ class AppleMapDataHandler(private val httpClient: HttpClient = createInternalCli
             LAT_LON_REGEX.find(newUrl)?.let { match ->
                 val val1 = match.groupValues[1].toDoubleOrNull()
                 val val2 = match.groupValues[2].toDoubleOrNull()
-
                 if (val1 != null && val2 != null) {
                     return LatLon(val1, val2).right()
                 }
