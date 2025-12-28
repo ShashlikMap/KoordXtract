@@ -4,15 +4,17 @@ import LatLon
 import LatLonExtractError
 import arrow.core.Either
 import arrow.core.getOrElse
-import arrow.core.left
 import arrow.core.raise.either
 import arrow.core.raise.ensure
-import arrow.core.right
 import httpclient.createNoRedirectClient
 import httpclient.getLocationHeader
 import httpclient.getWithFullUA
 import io.ktor.client.HttpClient
 
+/**
+ * Resolves Apple Maps links.
+ * It extracts [LatLon] from the first redirect url
+ */
 class AppleMapDataHandler(private val httpClient: HttpClient = createNoRedirectClient(true)) :
     MapDataHandler() {
     companion object {

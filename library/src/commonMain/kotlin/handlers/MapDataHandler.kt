@@ -7,6 +7,9 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 
+/**
+ * Abstract data resolver to [LatLon]
+ */
 abstract class MapDataHandler {
 
     protected companion object {
@@ -14,10 +17,20 @@ abstract class MapDataHandler {
             Regex("([-+]?\\d*\\.?\\d+)[, ]\\s*([-+]?\\d*\\.?\\d+)")
     }
 
+    /**
+     * Extracts [LatLon] from [data]
+     */
     abstract suspend fun resolve(data: String): Either<LatLonExtractError, LatLon>
 
+    /**
+     * Quick check if [LatLon] can be extracted from [data]
+     */
     abstract fun canResolve(data: String): Boolean
 
+    /**
+     * Convenient general [String] extension to extract [LatLon] using [regex].
+     * [latLonReversed] is used to swap the Lat and Lon
+     */
     protected fun String.tryExtract(regex: Regex, latLonReversed: Boolean = false): Option<LatLon> {
         regex.find(this)?.let { match ->
             val val1 = match.groupValues[1].toDoubleOrNull()

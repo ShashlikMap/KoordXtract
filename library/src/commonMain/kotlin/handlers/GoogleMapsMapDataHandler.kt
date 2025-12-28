@@ -3,9 +3,7 @@ package handlers
 import LatLon
 import LatLonExtractError
 import arrow.core.Either
-import arrow.core.None
 import arrow.core.Option
-import arrow.core.Some
 import arrow.core.getOrElse
 import arrow.core.raise.either
 import arrow.core.raise.ensure
@@ -20,6 +18,13 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
+
+/**
+ * Resolves Google Maps links.
+ * It extracts [LatLon] from HTML content of the [MAX_REDIRECTS] url.
+ * Quite often Google dynamic links return [HttpStatusCode.NotFound] so [MAX_RETRIES] will
+ * be applied if needed.
+ */
 class GoogleMapsMapDataHandler(
     httpClientLogs: Boolean = false,
     private val httpClient: HttpClient = createNoRedirectClient(
@@ -32,7 +37,7 @@ class GoogleMapsMapDataHandler(
 
         private const val MAX_RETRIES = 5
         private val RETRY_DELAY = 1.seconds
-        private val MAX_REDIRECTS = 2
+        private const val MAX_REDIRECTS = 2
 
         private val GOOGLE_LAT_LON_REGEX =
             Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
