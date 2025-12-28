@@ -7,7 +7,7 @@ import android.content.Intent
 import arrow.core.Either
 
 /**
- * Convenient extension to extracts [LatLon] from Android [Intent]
+ * Convenient extension to extract [LatLon] from Android [Intent]
  */
 @Suppress("unused")
 suspend fun LatLonExtractor.extractFromIntent(intent: Intent): Either<LatLonExtractError, LatLon> =

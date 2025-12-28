@@ -60,7 +60,7 @@ mavenPublishing {
 
     pom {
         name = "KoordXTract"
-        description = "Extract latitude/longitude from GoogleMaps and Apple Maps links"
+        description = "KMP library to extract latitude/longitude from GoogleMaps and Apple Maps links"
         inceptionYear = "2025"
         url = "https://github.com/ShashlikMap/KoordXtract"
         licenses {
