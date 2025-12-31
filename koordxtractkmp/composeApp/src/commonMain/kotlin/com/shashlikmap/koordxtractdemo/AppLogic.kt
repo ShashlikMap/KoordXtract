@@ -73,6 +73,7 @@ class AppLogic {
         latestLatLon = Some(State.Loading)
         scope.launch {
             latestLatLon = Some(State.Result(xTractor.extractFromStringData(data)))
+            Logger.d { "extracted lat/lon: $latestLatLon" }
         }
     }
 }
