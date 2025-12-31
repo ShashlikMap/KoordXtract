@@ -69,7 +69,6 @@ class LatLonExtractorTest {
                         .getOrNull(),
             )
 
-
             // from generate Google Maps route!
             assertEquals(
                 expected = LatLon(35.731913999999996, 139.78076729999998),

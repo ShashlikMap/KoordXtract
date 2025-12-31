@@ -94,8 +94,10 @@ class GoogleMapsMapDataHandler(
         val htmlContent: String = httpClient.getWithFullUA(url).body()
 
         // first we're trying to extract from URL using [GOOGLE_ROUTE_LAT_LON_REGEX]
-        return when (val result =
-            url.tryExtract(GOOGLE_ROUTE_LAT_LON_REGEX, latLonReversed = false)) {
+        return when (
+            val result =
+                url.tryExtract(GOOGLE_ROUTE_LAT_LON_REGEX, latLonReversed = false)
+        ) {
             is Some<LatLon> -> result
             None -> htmlContent.tryExtract(GOOGLE_LAT_LON_REGEX, latLonReversed = true)
         }
