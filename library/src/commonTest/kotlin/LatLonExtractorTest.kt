@@ -68,5 +68,15 @@ class LatLonExtractorTest {
                         .extractFromStringData("https://maps.app.goo.gl/PauhWtcmNPCUopxW9")
                         .getOrNull(),
             )
+
+
+            // from generate Google Maps route!
+            assertEquals(
+                expected = LatLon(35.731913999999996, 139.78076729999998),
+                actual =
+                    latLonExtractor
+                        .extractFromStringData("https://maps.app.goo.gl/7gCFTC2y2pDD3Lib8")
+                        .getOrNull(),
+            )
         }
 }

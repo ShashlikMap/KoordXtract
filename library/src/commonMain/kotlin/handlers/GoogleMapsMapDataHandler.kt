@@ -3,7 +3,9 @@ package handlers
 import LatLon
 import LatLonExtractError
 import arrow.core.Either
+import arrow.core.None
 import arrow.core.Option
+import arrow.core.Some
 import arrow.core.getOrElse
 import arrow.core.raise.either
 import arrow.core.raise.ensure
@@ -41,6 +43,9 @@ class GoogleMapsMapDataHandler(
 
         private val GOOGLE_LAT_LON_REGEX =
             Regex("""window\.APP_INITIALIZATION_STATE=\[\[\[-?\d+(?:\.\d+)?,\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)""")
+
+        private val GOOGLE_ROUTE_LAT_LON_REGEX =
+            Regex("!\\d+d([-+]?\\d*\\.?\\d+)!\\d+d([-+]?\\d*\\.?\\d+)")
     }
 
     override fun canResolve(data: String): Boolean = data.startsWith(GOOGLE_MAPS_URL_PREFIX)
@@ -87,6 +92,12 @@ class GoogleMapsMapDataHandler(
         co.touchlab.kermit.Logger
             .i { "try extract from: $url" }
         val htmlContent: String = httpClient.getWithFullUA(url).body()
-        return htmlContent.tryExtract(GOOGLE_LAT_LON_REGEX, latLonReversed = true)
+
+        // first we're trying to extract from URL using [GOOGLE_ROUTE_LAT_LON_REGEX]
+        return when (val result =
+            url.tryExtract(GOOGLE_ROUTE_LAT_LON_REGEX, latLonReversed = false)) {
+            is Some<LatLon> -> result
+            None -> htmlContent.tryExtract(GOOGLE_LAT_LON_REGEX, latLonReversed = true)
+        }
     }
 }
