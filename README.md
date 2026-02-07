@@ -4,6 +4,8 @@ to latitude/longitude coordinates without relying on any Google API(e.g. Places)
 
 Initial goals of the library is to use it in [shashlik-map](https://github.com/ShashlikMap/shashlik-map) project.
 
+### !! Google has changes something so that "place" sharing doesn't work now, but the "direction" sharing still provides a correct location!
+
 Android demo application can receive a shared the link from GoogleMaps or it can launch an internal test that resolves some random links:
 ```
 D  link: https://maps.app.goo.gl/wPn6i3inrCDNFD7r8, result: Either.Right((108.0465532, 12.7109931))
