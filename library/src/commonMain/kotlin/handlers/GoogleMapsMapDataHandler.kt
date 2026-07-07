@@ -46,6 +46,10 @@ class GoogleMapsMapDataHandler(
 
         private val GOOGLE_ROUTE_LAT_LON_REGEX =
             Regex("!\\d+d([-+]?\\d*\\.?\\d+)!\\d+d([-+]?\\d*\\.?\\d+)")
+
+        private val PLACE_URL = """/maps/preview/place\?[^"]+""".toRegex()
+
+        private val PLACE_URL_LAT_LON_REGEX = """\[-?[\d.]+,(-?[\d.]+),(-?[\d.]+)]""".toRegex()
     }
 
     override fun canResolve(data: String): Boolean = data.startsWith(GOOGLE_MAPS_URL_PREFIX)
@@ -92,6 +96,19 @@ class GoogleMapsMapDataHandler(
         co.touchlab.kermit.Logger
             .i { "try extract from: $url" }
         val htmlContent: String = httpClient.getWithFullUA(url).body()
+
+        val placeUrl = PLACE_URL.find(htmlContent)?.value?.replace("&amp;", "&")
+        if (placeUrl != null) {
+            val fullPlaceUrl = "https://www.google.com$placeUrl"
+            co.touchlab.kermit.Logger
+                .i { "try extract from placeUrl: $fullPlaceUrl" }
+            val placeHtmlContent: String = httpClient.getWithFullUA(fullPlaceUrl).body()
+            val coordFromPlaceHtmlContent =
+                placeHtmlContent.tryExtract(PLACE_URL_LAT_LON_REGEX, latLonReversed = true)
+            if (coordFromPlaceHtmlContent.isSome()) {
+                return coordFromPlaceHtmlContent
+            }
+        }
 
         // first we're trying to extract from URL using [GOOGLE_ROUTE_LAT_LON_REGEX]
         return when (
